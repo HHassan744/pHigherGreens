@@ -133,3 +133,25 @@ The output in this case has in its first line
 [-624   624   -90   90   0   273   -273   192   0   0]
 ```
 These are coefficients that weight the different values for a linear combination that equals zero. In this line, the final two entries correspond to the error terms of the linear combination (there are two entries because the values take place in `Q_{9}`). The third last entry is the coefficient of `final_answer_832`, which is the value of the higher Green's functions. All other coefficients are the weights of the prime factors. 
+
+## Understanding the cocycle generation files
+For example `Example 5.10 GEN.ipynb`
+Starts as before by specifying the parameters and running the main file. 
+
+Then computes the Mittag Leffler expansion of the level 1 rational function on the standard affinoid. This is stored in the `MittagLeffler` object `LMMC32`. 
+```
+t = 2*sqrt(2)
+J32 = Level1MittagLeffler(t)
+```
+
+Then the following lines of code apply the recursion described in `Algorithm 5.7`
+```
+for i in range(pprec):
+    previous = (-1) * previous.Next()
+    LMMC32 += previous
+    print('completed level ' + str(i) + " at " + str(datetime.datetime.now()))
+```
+This recursion is quite slow and may take several hours to compute. 
+
+Finally, the object is stored in a JSON file.
+```write(LMMC32, "J32F1p3pr150.json")```
