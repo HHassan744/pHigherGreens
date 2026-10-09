@@ -50,7 +50,7 @@ Here
 - `pprec` is the p-adic precision
 
 Then it runs 
-```
+```sage
 LMMC8 = read("J8F1p3pr150.json")
 LMMC32 = read("J32F1p3pr150.json")
 LMMCcomb = 7 * LMMC8 - 4 * LMMC32
@@ -59,7 +59,7 @@ LMMCcomb = 7 * LMMC8 - 4 * LMMC32
 The files `J8F1p3pr150.json` and `J32F1p3pr150.json` contain data for the `MittagLeffler` objects associated to the cocycles of weight 4 and RM-points `sqrt(2)` and `2sqrt(2)`, respectively. LMMCcomb is then the linear combination associated to a divisor of strong degree zero.
 
 The next lines are a sanity check 
-```
+```sage
 LMMCcomb.term2()
 LMMCcomb.term3()
 LMMCcomb.fix_poly_invariance()
@@ -74,7 +74,7 @@ The next two lines check that the polynomial parts now also satisfy the two-term
 
 The `LMMC` objects only hold the information of level 1 and higher of the cocycle. The level 0 parts are stored differently as they do not give power series. Instead they are stored as a PolyLog object, which is much quicker to compute. 
 
-```
+```sage
 PL8 = Level0PolyLog(sqrt(2))
 PL32 = Level0PolyLog(2*sqrt(2))
 PL832 = 7 * PL8 - 4 * PL32
@@ -84,7 +84,7 @@ The lines above compute the `PolyLog` objects associated to our particular divis
 
 Now it is time to evaluate these objects (here at `4*sqrt(2) + 5`)
 
-```
+```sage
 s = 4 * rd1 + 5
 ML_to_eval = MittagLeffler([PS(0) for i in range(p+1)])
 PL_to_eval = PolyLog({})
@@ -95,7 +95,7 @@ for M in automorph_sequence_pos(s):
 ```
 The above lines compute `J(\gamma_{\sigma})` by using the continued fraction expansion. 
 
-```
+```sage
 final_answer_832 = 0
 
 for i in range(p):
@@ -115,7 +115,7 @@ Computes the value using the formula described in `Algorithm 5.7`
 
 The next few lines just prepare the field where the values are expected to take place and the expected primes to appear in the factorization 
 
-```
+```sage
 QF3.<rd3> = QuadraticField(-1)
 hom3 = QF3.hom([K(-1).square_root()])
 primes = [5, 13, 19, 29]
@@ -129,7 +129,7 @@ pr_log = [hom3(i).log(0) for i in pr]
 Finally, the `lindep` function uses the `LLL` algorithm to find linear relationships between the logarithms of prime factors in the field `QF3` and the final answer.
 The output in this case has in its first line 
 
-```
+```sage
 [-624   624   -90   90   0   273   -273   192   0   0]
 ```
 These are coefficients that weight the different values for a linear combination that equals zero. In this line, the final two entries correspond to the error terms of the linear combination (there are two entries because the values take place in `Q_{9}`). The third last entry is the coefficient of `final_answer_832`, which is the value of the higher Green's functions. All other coefficients are the weights of the prime factors. 
@@ -139,13 +139,13 @@ For example `Example 5.10 GEN.ipynb`
 Starts as before by specifying the parameters and running the main file. 
 
 Then computes the Mittag Leffler expansion of the level 1 rational function on the standard affinoid. This is stored in the `MittagLeffler` object `LMMC32`. 
-```
+```sage
 t = 2*sqrt(2)
 J32 = Level1MittagLeffler(t)
 ```
 
 Then the following lines of code apply the recursion described in `Algorithm 5.7`
-```
+```sage
 for i in range(pprec):
     previous = (-1) * previous.Next()
     LMMC32 += previous
@@ -154,4 +154,4 @@ for i in range(pprec):
 This recursion is quite slow and may take several hours to compute. 
 
 Finally, the object is stored in a JSON file.
-```write(LMMC32, "J32F1p3pr150.json")```
+```sage write(LMMC32, "J32F1p3pr150.json")```
